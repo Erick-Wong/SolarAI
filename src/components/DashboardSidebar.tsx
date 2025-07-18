@@ -55,15 +55,13 @@ export function DashboardSidebar() {
       <SidebarContent className="bg-gradient-background">
         <div className={`p-4 ${isCollapsed ? "p-2" : ""}`}>
           <div className="flex items-center gap-3">
-            <img 
-              src="/lovable-uploads/1d033ddb-7190-490e-80aa-5af0e180310c.png" 
-              alt="Energy Edge Logo" 
-              className="w-12 h-12 object-contain"
-            />
+            <div className="w-8 h-8 bg-gradient-solar rounded-lg flex items-center justify-center">
+              <Zap className="w-5 h-5 text-primary-foreground" />
+            </div>
             {!isCollapsed && (
               <div>
-                <h2 className="text-lg font-bold text-foreground">Energy Edge</h2>
-                <p className="text-xs text-muted-foreground">Solar Energy Solutions</p>
+                <h2 className="text-lg font-bold text-foreground">SolarBiz</h2>
+                <p className="text-xs text-muted-foreground">Dashboard</p>
               </div>
             )}
           </div>
