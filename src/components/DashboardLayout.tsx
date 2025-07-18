@@ -59,7 +59,7 @@ export function DashboardLayout({ children, title, description, showBackButton =
         
         <main className="flex-1 overflow-auto">
           {/* Header */}
-          <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm border-b border-border">
+          <header className="sticky top-0 z-10 bg-card/95 backdrop-blur-sm border-b border-border shadow-card">
             <div className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center gap-4">
                 <SidebarTrigger />

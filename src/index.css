@@ -2,64 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Solar Business Dashboard Design System
+/* Dark Dashboard Design System - Modern Green Theme
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 50 20% 98%;
-    --foreground: 220 13% 13%;
+    /* Dark theme base colors */
+    --background: 220 13% 9%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 13% 13%;
+    --card: 220 13% 11%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 13% 13%;
+    --popover: 220 13% 11%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Solar-themed primary colors */
-    --primary: 32 95% 44%;
-    --primary-foreground: 220 13% 13%;
-    --primary-glow: 45 100% 60%;
+    /* Green-themed primary colors */
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 142 84% 47%;
 
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 220 13% 13%;
+    --secondary: 220 13% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 13% 15%;
+    --muted-foreground: 0 0% 63%;
 
-    --accent: 213 94% 68%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 0 0% 98%;
 
     --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
+    --success-foreground: 0 0% 98%;
 
     --warning: 38 92% 50%;
-    --warning-foreground: 220 13% 13%;
+    --warning-foreground: 220 13% 9%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 32 95% 44%;
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
+    --ring: 142 76% 36%;
 
-    /* Solar-inspired gradients */
-    --gradient-solar: linear-gradient(135deg, hsl(45 100% 60%), hsl(32 95% 44%));
-    --gradient-energy: linear-gradient(135deg, hsl(213 94% 68%), hsl(32 95% 44%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 84% 39%));
-    --gradient-background: linear-gradient(135deg, hsl(50 20% 98%), hsl(210 20% 96%));
+    /* Modern dark gradients with green accents */
+    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 84% 47%));
+    --gradient-card: linear-gradient(135deg, hsl(220 13% 11%), hsl(220 13% 13%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 84% 47%));
+    --gradient-background: linear-gradient(135deg, hsl(220 13% 9%), hsl(220 13% 11%));
 
-    /* Shadows and effects */
-    --shadow-solar: 0 10px 40px -10px hsl(32 95% 44% / 0.3);
-    --shadow-energy: 0 8px 32px -8px hsl(213 94% 68% / 0.25);
-    --shadow-elevated: 0 20px 50px -12px hsl(220 13% 13% / 0.15);
+    /* Modern shadows and effects */
+    --shadow-card: 0 4px 20px -4px hsl(220 13% 5% / 0.5);
+    --shadow-primary: 0 8px 32px -8px hsl(142 76% 36% / 0.3);
+    --shadow-elevated: 0 20px 50px -12px hsl(220 13% 5% / 0.4);
 
-    /* Animations */
+    /* Smooth animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -78,57 +79,10 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 220 13% 8%;
-    --foreground: 50 20% 95%;
-
-    --card: 220 13% 10%;
-    --card-foreground: 50 20% 95%;
-
-    --popover: 220 13% 10%;
-    --popover-foreground: 50 20% 95%;
-
-    /* Solar-themed primary colors for dark mode */
-    --primary: 45 100% 60%;
-    --primary-foreground: 220 13% 8%;
-    --primary-glow: 32 95% 44%;
-
-    --secondary: 220 13% 15%;
-    --secondary-foreground: 50 20% 95%;
-
-    --muted: 220 13% 15%;
-    --muted-foreground: 220 9% 60%;
-
-    --accent: 213 94% 68%;
-    --accent-foreground: 220 13% 8%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 50 20% 95%;
-
-    --success: 142 76% 36%;
-    --success-foreground: 50 20% 95%;
-
-    --warning: 38 92% 50%;
-    --warning-foreground: 220 13% 8%;
-
-    --border: 220 13% 20%;
-    --input: 220 13% 20%;
-    --ring: 45 100% 60%;
-    
-    --sidebar-background: 220 13% 8%;
-    --sidebar-foreground: 50 20% 95%;
-    --sidebar-primary: 45 100% 60%;
-    --sidebar-primary-foreground: 220 13% 8%;
-    --sidebar-accent: 220 13% 15%;
-    --sidebar-accent-foreground: 50 20% 95%;
-    --sidebar-border: 220 13% 20%;
-    --sidebar-ring: 45 100% 60%;
-
-    /* Dark mode gradients */
-    --gradient-solar: linear-gradient(135deg, hsl(45 100% 60%), hsl(32 95% 44%));
-    --gradient-energy: linear-gradient(135deg, hsl(213 94% 68%), hsl(32 95% 44%));
-    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 84% 39%));
-    --gradient-background: linear-gradient(135deg, hsl(220 13% 8%), hsl(220 13% 10%));
+  .light {
+    /* Light theme override (keeping dark as default) */
+    --background: 220 13% 9%;
+    --foreground: 0 0% 98%;
   }
 }
 

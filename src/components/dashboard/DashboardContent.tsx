@@ -15,7 +15,7 @@ import {
 
 export function DashboardContent() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
@@ -62,49 +62,49 @@ export function DashboardContent() {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-card rounded-lg border p-6">
-          <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-              <div className="w-2 h-2 bg-success rounded-full"></div>
+        <div className="bg-gradient-card rounded-xl border border-border/50 p-6 shadow-card">
+          <h3 className="text-xl font-semibold mb-6 text-foreground">Recent Activities</h3>
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 p-4 bg-muted/20 rounded-lg border border-border/30">
+              <div className="w-3 h-3 bg-success rounded-full shadow-lg"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium">Installation completed at Johnson Residence</p>
-                <p className="text-xs text-muted-foreground">2 hours ago</p>
+                <p className="text-sm font-medium text-foreground">Installation completed at Johnson Residence</p>
+                <p className="text-xs text-muted-foreground mt-1">2 hours ago</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-              <div className="w-2 h-2 bg-warning rounded-full"></div>
+            <div className="flex items-center gap-4 p-4 bg-muted/20 rounded-lg border border-border/30">
+              <div className="w-3 h-3 bg-warning rounded-full shadow-lg"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium">New lead from Dallas - Smith Commercial</p>
-                <p className="text-xs text-muted-foreground">4 hours ago</p>
+                <p className="text-sm font-medium text-foreground">New lead from Dallas - Smith Commercial</p>
+                <p className="text-xs text-muted-foreground mt-1">4 hours ago</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
+            <div className="flex items-center gap-4 p-4 bg-muted/20 rounded-lg border border-border/30">
+              <div className="w-3 h-3 bg-primary rounded-full shadow-lg"></div>
               <div className="flex-1">
-                <p className="text-sm font-medium">Quote sent to Wilson Office - $85k system</p>
-                <p className="text-xs text-muted-foreground">6 hours ago</p>
+                <p className="text-sm font-medium text-foreground">Quote sent to Wilson Office - $85k system</p>
+                <p className="text-xs text-muted-foreground mt-1">6 hours ago</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-card rounded-lg border p-6">
-          <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <Button className="bg-gradient-solar hover:shadow-solar transition-smooth">
+        <div className="bg-gradient-card rounded-xl border border-border/50 p-6 shadow-card">
+          <h3 className="text-xl font-semibold mb-6 text-foreground">Quick Actions</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <Button className="bg-gradient-primary hover:shadow-primary transition-smooth h-12">
               <Users className="w-4 h-4 mr-2" />
               Add Lead
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" className="border-border/50 hover:bg-muted/20 h-12">
               <Calendar className="w-4 h-4 mr-2" />
               Schedule
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" className="border-border/50 hover:bg-muted/20 h-12">
               <Zap className="w-4 h-4 mr-2" />
               New Install
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" className="border-border/50 hover:bg-muted/20 h-12">
               <TrendingUp className="w-4 h-4 mr-2" />
               Reports
             </Button>

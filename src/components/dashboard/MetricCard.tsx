@@ -26,22 +26,26 @@ export function MetricCard({
   };
 
   return (
-    <Card className={cn("hover:shadow-energy transition-smooth", className)}>
+    <Card className={cn("bg-gradient-card border-border/50 hover:shadow-primary transition-smooth", className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
-            <div className="flex items-baseline gap-2">
-              <h3 className="text-2xl font-bold text-foreground">{value}</h3>
+            <p className="text-sm font-medium text-muted-foreground mb-2">{title}</p>
+            <div className="flex items-baseline gap-3">
+              <h3 className="text-3xl font-bold text-foreground">{value}</h3>
               {change && (
-                <span className={cn("text-sm font-medium", changeColors[changeType])}>
+                <span className={cn("text-sm font-semibold px-2 py-1 rounded-full", 
+                  changeType === "positive" ? "text-success bg-success/10" :
+                  changeType === "negative" ? "text-destructive bg-destructive/10" :
+                  "text-muted-foreground bg-muted/10"
+                )}>
                   {change}
                 </span>
               )}
             </div>
           </div>
-          <div className="w-12 h-12 bg-gradient-solar rounded-lg flex items-center justify-center">
-            <Icon className="w-6 h-6 text-primary-foreground" />
+          <div className="w-14 h-14 bg-gradient-primary rounded-xl flex items-center justify-center shadow-primary">
+            <Icon className="w-7 h-7 text-primary-foreground" />
           </div>
         </div>
       </CardContent>
