@@ -14,6 +14,7 @@ import Geographic from "./pages/Geographic";
 import Calendar from "./pages/Calendar";
 import Installations from "./pages/Installations";
 import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/installations" element={<Installations />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/settings" element={<Settings />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
