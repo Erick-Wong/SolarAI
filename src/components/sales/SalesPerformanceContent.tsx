@@ -24,9 +24,6 @@ import {
 } from "lucide-react";
 import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { GeographicMap } from "./GeographicMap";
-import { RegionalAnalytics } from "./RegionalAnalytics";
-import { NorthTexasInstallationMap } from "./NorthTexasInstallationMap";
 
 interface SalesKPI {
   totalSales: number;
@@ -82,16 +79,6 @@ export function SalesPerformanceContent() {
   const [regionFilter, setRegionFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [repFilter, setRepFilter] = useState("all");
-  const [selectedMapMetric, setSelectedMapMetric] = useState<'sales' | 'revenue' | 'installations' | 'leads' | 'conversion'>('sales');
-  const [mapboxToken, setMapboxToken] = useState('');
-
-  const handleMapMetricChange = (metric: string) => {
-    setSelectedMapMetric(metric as 'sales' | 'revenue' | 'installations' | 'leads' | 'conversion');
-  };
-
-  const handleMapboxTokenChange = (token: string) => {
-    setMapboxToken(token);
-  };
 
   const mockTopReps: TopRep[] = [
     { name: "Sarah Johnson", deals: 12, revenue: 420000, callsMade: 89, quotesSent: 24 },
@@ -286,14 +273,10 @@ export function SalesPerformanceContent() {
 
       {/* Tabbed Content */}
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-1">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="geographic" className="flex items-center gap-2">
-            <Map className="w-4 h-4" />
-            Geographic
+            Sales Performance Overview
           </TabsTrigger>
         </TabsList>
 
@@ -509,31 +492,6 @@ export function SalesPerformanceContent() {
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
-
-        {/* Geographic Tab */}
-        <TabsContent value="geographic" className="space-y-8">
-          {/* North Texas Installation Map */}
-          <NorthTexasInstallationMap 
-            mapboxToken={mapboxToken}
-            onTokenChange={handleMapboxTokenChange}
-          />
-
-          {/* Interactive Geographic Map */}
-          <GeographicMap 
-            data={[]}
-            selectedMetric={selectedMapMetric}
-            onMetricChange={handleMapMetricChange}
-          />
-
-          {/* Regional Analytics */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <BarChart3 className="w-6 h-6 text-primary" />
-              Regional Analytics
-            </h2>
-            <RegionalAnalytics data={[]} />
-          </div>
         </TabsContent>
       </Tabs>
     </div>
