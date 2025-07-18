@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import { Badge } from "@/components/ui/badge";
@@ -277,272 +278,252 @@ export function SalesPerformanceContent() {
         </CardContent>
       </Card>
 
-      {/* Core KPIs */}
-      <div>
-        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-          <Target className="w-6 h-6 text-primary" />
-          Core KPIs
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <MetricCard
-            title="Total Sales (This Month)"
-            value={kpis.totalSales}
-            change="+15.3%"
-            changeType="positive"
-            icon={DollarSign}
-          />
-          <MetricCard
-            title="Total Revenue"
-            value={formatCurrency(kpis.totalRevenue)}
-            change="+12.1%"
-            changeType="positive"
-            icon={TrendingUp}
-          />
-          <MetricCard
-            title="Lead-to-Customer Conversion"
-            value={`${kpis.conversionRate.toFixed(1)}%`}
-            change="+2.3%"
-            changeType="positive"
-            icon={Users}
-          />
-          <MetricCard
-            title="Average Deal Size"
-            value={formatCurrency(kpis.averageDealSize)}
-            change="+8.7%"
-            changeType="positive"
-            icon={Target}
-          />
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          <MetricCard
-            title="Sales Cycle Length"
-            value={`${kpis.salesCycleLength} days`}
-            change="-3 days"
-            changeType="positive"
-            icon={Clock}
-          />
-          <MetricCard
-            title="Quota Attainment"
-            value={`${kpis.quotaAttainment}%`}
-            change="+5%"
-            changeType="positive"
-            icon={Star}
-          />
-          <MetricCard
-            title="Installations Progress"
-            value={`${kpis.installationsCompleted}/${kpis.installationsScheduled}`}
-            change="On Track"
-            changeType="positive"
-            icon={Zap}
-          />
-        </div>
-      </div>
+      {/* Tabbed Content */}
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="geographic" className="flex items-center gap-2">
+            <Map className="w-4 h-4" />
+            Geographic
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Sales Funnel */}
-      <Card className="bg-gradient-card border-border/50">
-        <CardHeader>
-          <CardTitle>Sales Funnel</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-5 gap-4">
-              <div className="text-center">
-                <div className="w-full h-20 bg-gradient-primary rounded-lg flex items-center justify-center mb-2">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary-foreground">{funnelData.leads}</div>
-                    <div className="text-xs text-primary-foreground">Leads</div>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">100%</div>
-              </div>
-
-              <div className="text-center">
-                <div className="w-full h-20 bg-blue-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(50, (funnelData.qualified/funnelData.leads) * 80)}px`}}>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-white">{funnelData.qualified}</div>
-                    <div className="text-xs text-white">Qualified</div>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.qualified, funnelData.leads)}%</div>
-              </div>
-
-              <div className="text-center">
-                <div className="w-full h-20 bg-purple-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(40, (funnelData.quoted/funnelData.leads) * 80)}px`}}>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-white">{funnelData.quoted}</div>
-                    <div className="text-xs text-white">Quoted</div>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.quoted, funnelData.leads)}%</div>
-              </div>
-
-              <div className="text-center">
-                <div className="w-full h-20 bg-green-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(30, (funnelData.closedWon/funnelData.leads) * 80)}px`}}>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-white">{funnelData.closedWon}</div>
-                    <div className="text-xs text-white">Closed Won</div>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.closedWon, funnelData.leads)}%</div>
-              </div>
-
-              <div className="text-center">
-                <div className="w-full h-20 bg-yellow-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(20, (funnelData.installed/funnelData.leads) * 80)}px`}}>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-white">{funnelData.installed}</div>
-                    <div className="text-xs text-white">Installed</div>
-                  </div>
-                </div>
-                <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.installed, funnelData.leads)}%</div>
-              </div>
+        {/* Overview Tab */}
+        <TabsContent value="overview" className="space-y-8">
+          {/* Core KPIs */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Target className="w-6 h-6 text-primary" />
+              Core KPIs
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <MetricCard
+                title="Total Sales (This Month)"
+                value={kpis.totalSales}
+                change="+15.3%"
+                changeType="positive"
+                icon={DollarSign}
+              />
+              <MetricCard
+                title="Total Revenue"
+                value={formatCurrency(kpis.totalRevenue)}
+                change="+12.1%"
+                changeType="positive"
+                icon={TrendingUp}
+              />
+              <MetricCard
+                title="Lead-to-Customer Conversion"
+                value={`${kpis.conversionRate.toFixed(1)}%`}
+                change="+2.3%"
+                changeType="positive"
+                icon={Users}
+              />
+              <MetricCard
+                title="Average Deal Size"
+                value={formatCurrency(kpis.averageDealSize)}
+                change="+8.7%"
+                changeType="positive"
+                icon={Target}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <MetricCard
+                title="Sales Cycle Length"
+                value={`${kpis.salesCycleLength} days`}
+                change="-3 days"
+                changeType="positive"
+                icon={Clock}
+              />
+              <MetricCard
+                title="Quota Attainment"
+                value={`${kpis.quotaAttainment}%`}
+                change="+5%"
+                changeType="positive"
+                icon={Star}
+              />
+              <MetricCard
+                title="Installations Progress"
+                value={`${kpis.installationsCompleted}/${kpis.installationsScheduled}`}
+                change="On Track"
+                changeType="positive"
+                icon={Zap}
+              />
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Monthly Sales Trends */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="w-5 h-5" />
-              Monthly Sales Trends
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {salesTrends.map((trend, index) => (
-                <div key={trend.month} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="text-sm font-medium">{trend.month}</div>
-                    <Badge variant="secondary">{trend.sales} deals</Badge>
-                  </div>
-                  <div className="text-sm font-medium">{formatCurrency(trend.revenue)}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Top Performing Reps */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Star className="w-5 h-5" />
-              Top Performing Reps
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {mockTopReps.map((rep, index) => (
-                <div key={rep.name} className="flex items-center justify-between p-4 bg-muted/20 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold">
-                      {index + 1}
-                    </div>
-                    <div>
-                      <div className="font-medium">{rep.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {rep.deals} deals • {rep.callsMade} calls • {rep.quotesSent} quotes
+          {/* Sales Funnel */}
+          <Card className="bg-gradient-card border-border/50">
+            <CardHeader>
+              <CardTitle>Sales Funnel</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="grid grid-cols-5 gap-4">
+                  <div className="text-center">
+                    <div className="w-full h-20 bg-gradient-primary rounded-lg flex items-center justify-center mb-2">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-primary-foreground">{funnelData.leads}</div>
+                        <div className="text-xs text-primary-foreground">Leads</div>
                       </div>
                     </div>
+                    <div className="text-sm text-muted-foreground">100%</div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-bold text-success">{formatCurrency(rep.revenue)}</div>
+
+                  <div className="text-center">
+                    <div className="w-full h-20 bg-blue-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(50, (funnelData.qualified/funnelData.leads) * 80)}px`}}>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-white">{funnelData.qualified}</div>
+                        <div className="text-xs text-white">Qualified</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.qualified, funnelData.leads)}%</div>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="w-full h-20 bg-purple-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(40, (funnelData.quoted/funnelData.leads) * 80)}px`}}>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-white">{funnelData.quoted}</div>
+                        <div className="text-xs text-white">Quoted</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.quoted, funnelData.leads)}%</div>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="w-full h-20 bg-green-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(30, (funnelData.closedWon/funnelData.leads) * 80)}px`}}>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-white">{funnelData.closedWon}</div>
+                        <div className="text-xs text-white">Closed Won</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.closedWon, funnelData.leads)}%</div>
+                  </div>
+
+                  <div className="text-center">
+                    <div className="w-full h-20 bg-yellow-500 rounded-lg flex items-center justify-center mb-2" style={{height: `${Math.max(20, (funnelData.installed/funnelData.leads) * 80)}px`}}>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-white">{funnelData.installed}</div>
+                        <div className="text-xs text-white">Installed</div>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{getFunnelPercentage(funnelData.installed, funnelData.leads)}%</div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Interactive Geographic Map */}
-      <div className="col-span-full">
-        <GeographicMap 
-          data={[]}
-          selectedMetric={selectedMapMetric}
-          onMetricChange={handleMapMetricChange}
-        />
-      </div>
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Monthly Sales Trends */}
+            <Card className="bg-gradient-card border-border/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  Monthly Sales Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {salesTrends.map((trend, index) => (
+                    <div key={trend.month} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm font-medium">{trend.month}</div>
+                        <Badge variant="secondary">{trend.sales} deals</Badge>
+                      </div>
+                      <div className="text-sm font-medium">{formatCurrency(trend.revenue)}</div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-      {/* Geographic Sales and Pipeline Forecast */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Geographic Sales Distribution */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              Geographic Sales Distribution
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+            {/* Top Performing Reps */}
+            <Card className="bg-gradient-card border-border/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="w-5 h-5" />
+                  Top Performing Reps
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {mockTopReps.map((rep, index) => (
+                    <div key={rep.name} className="flex items-center justify-between p-4 bg-muted/20 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <div className="font-medium">{rep.name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {rep.deals} deals • {rep.callsMade} calls • {rep.quotesSent} quotes
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-bold text-success">{formatCurrency(rep.revenue)}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Pipeline Forecast */}
+          <Card className="bg-gradient-card border-border/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                Pipeline Forecast
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="p-4 bg-muted/20 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-primary">45%</div>
-                  <div className="text-sm text-muted-foreground">California</div>
+                  <div className="text-3xl font-bold text-primary mb-2">{formatCurrency(1250000)}</div>
+                  <div className="text-sm text-muted-foreground">Weighted Pipeline</div>
+                  <div className="text-xs text-success mt-1">+18% from last month</div>
                 </div>
                 <div className="p-4 bg-muted/20 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-blue-500">25%</div>
-                  <div className="text-sm text-muted-foreground">Texas</div>
+                  <div className="text-3xl font-bold text-blue-500 mb-2">42</div>
+                  <div className="text-sm text-muted-foreground">Open Opportunities</div>
+                  <div className="text-xs text-success mt-1">+5 new this week</div>
                 </div>
                 <div className="p-4 bg-muted/20 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-purple-500">20%</div>
-                  <div className="text-sm text-muted-foreground">Florida</div>
-                </div>
-                <div className="p-4 bg-muted/20 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-green-500">10%</div>
-                  <div className="text-sm text-muted-foreground">Others</div>
+                  <div className="text-3xl font-bold text-purple-500 mb-2">78%</div>
+                  <div className="text-sm text-muted-foreground">Close Probability</div>
+                  <div className="text-xs text-success mt-1">Above target</div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-        {/* Pipeline Forecast */}
-        <Card className="bg-gradient-card border-border/50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
-              Pipeline Forecast
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="p-4 bg-gradient-primary/10 border border-primary/20 rounded-lg">
-                <div className="text-sm text-muted-foreground mb-1">Expected Revenue (Next 30 Days)</div>
-                <div className="text-3xl font-bold text-primary">{formatCurrency(1250000)}</div>
-                <div className="text-sm text-success">+18% from last month</div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-muted/20 rounded-lg">
-                  <div className="text-sm text-muted-foreground">High Probability</div>
-                  <div className="text-xl font-bold">{formatCurrency(850000)}</div>
-                  <div className="text-xs text-muted-foreground">68% weighted</div>
-                </div>
-                <div className="p-3 bg-muted/20 rounded-lg">
-                  <div className="text-sm text-muted-foreground">Medium Probability</div>
-                  <div className="text-xl font-bold">{formatCurrency(400000)}</div>
-                  <div className="text-xs text-muted-foreground">32% weighted</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        {/* Geographic Tab */}
+        <TabsContent value="geographic" className="space-y-8">
+          {/* Interactive Geographic Map */}
+          <GeographicMap 
+            data={[]}
+            selectedMetric={selectedMapMetric}
+            onMetricChange={handleMapMetricChange}
+          />
 
-      {/* Regional Analytics Section */}
-      <div>
-        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-          <BarChart3 className="w-6 h-6 text-primary" />
-          Regional Analytics
-        </h2>
-        <RegionalAnalytics data={[]} />
-      </div>
+          {/* Regional Analytics */}
+          <div>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <BarChart3 className="w-6 h-6 text-primary" />
+              Regional Analytics
+            </h2>
+            <RegionalAnalytics data={[]} />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
