@@ -58,7 +58,7 @@ export function DashboardSidebar() {
             <img 
               src="/lovable-uploads/1d033ddb-7190-490e-80aa-5af0e180310c.png" 
               alt="Energy Edge Logo" 
-              className="w-8 h-8 object-contain"
+              className="w-12 h-12 object-contain"
             />
             {!isCollapsed && (
               <div>

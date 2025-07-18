@@ -24,7 +24,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/1d033ddb-7190-490e-80aa-5af0e180310c.png" 
             alt="Energy Edge Logo" 
-            className="w-16 h-16 object-contain mx-auto mb-4 animate-pulse"
+            className="w-24 h-24 object-contain mx-auto mb-4 animate-pulse"
           />
           <p className="text-muted-foreground">Loading your dashboard...</p>
         </div>
