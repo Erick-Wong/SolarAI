@@ -6,6 +6,7 @@ import { SalesChart } from "@/components/dashboard/SalesChart";
 import { PipelineChart } from "@/components/dashboard/PipelineChart";
 import { InstallationTracker } from "@/components/dashboard/InstallationTracker";
 import { GeographicMap } from "@/components/dashboard/GeographicMap";
+import { QuickActionDialogs } from "@/components/dashboard/QuickActionDialogs";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import {
@@ -51,6 +52,8 @@ export function DashboardContent() {
   });
   const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [leadDialogOpen, setLeadDialogOpen] = useState(false);
+  const [installDialogOpen, setInstallDialogOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -334,7 +337,7 @@ export function DashboardContent() {
           <div className="grid grid-cols-2 gap-4">
             <Button 
               className="bg-gradient-primary hover:shadow-primary transition-smooth h-12"
-              onClick={() => navigate('/leads')}
+              onClick={() => setLeadDialogOpen(true)}
             >
               <Users className="w-4 h-4 mr-2" />
               Add Lead
@@ -350,7 +353,7 @@ export function DashboardContent() {
             <Button 
               variant="outline" 
               className="border-border/50 hover:bg-muted/20 h-12"
-              onClick={() => navigate('/installations')}
+              onClick={() => setInstallDialogOpen(true)}
             >
               <Zap className="w-4 h-4 mr-2" />
               New Install
@@ -358,7 +361,7 @@ export function DashboardContent() {
             <Button 
               variant="outline" 
               className="border-border/50 hover:bg-muted/20 h-12"
-              onClick={() => navigate('/analytics')}
+              onClick={() => navigate('/sales-performance')}
             >
               <TrendingUp className="w-4 h-4 mr-2" />
               Reports
@@ -366,6 +369,13 @@ export function DashboardContent() {
           </div>
         </div>
       </div>
+
+      <QuickActionDialogs
+        leadDialogOpen={leadDialogOpen}
+        setLeadDialogOpen={setLeadDialogOpen}
+        installDialogOpen={installDialogOpen}
+        setInstallDialogOpen={setInstallDialogOpen}
+      />
     </div>
   );
 }

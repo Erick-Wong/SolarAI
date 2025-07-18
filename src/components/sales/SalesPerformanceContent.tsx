@@ -80,22 +80,8 @@ export function SalesPerformanceContent() {
   const [sourceFilter, setSourceFilter] = useState("all");
   const [repFilter, setRepFilter] = useState("all");
 
-  const mockTopReps: TopRep[] = [
-    { name: "Sarah Johnson", deals: 12, revenue: 420000, callsMade: 89, quotesSent: 24 },
-    { name: "Mike Chen", deals: 10, revenue: 350000, callsMade: 76, quotesSent: 18 },
-    { name: "Emily Rodriguez", deals: 8, revenue: 280000, callsMade: 65, quotesSent: 15 },
-    { name: "David Kim", deals: 7, revenue: 245000, callsMade: 58, quotesSent: 14 },
-    { name: "Jessica Martinez", deals: 6, revenue: 210000, callsMade: 52, quotesSent: 12 }
-  ];
-
-  const salesTrends = [
-    { month: "Jan", sales: 8, revenue: 280000 },
-    { month: "Feb", sales: 12, revenue: 420000 },
-    { month: "Mar", sales: 15, revenue: 525000 },
-    { month: "Apr", sales: 18, revenue: 630000 },
-    { month: "May", sales: 22, revenue: 770000 },
-    { month: "Jun", sales: 20, revenue: 700000 }
-  ];
+  const [topReps, setTopReps] = useState<TopRep[]>([]);
+  const [salesTrends, setSalesTrends] = useState<any[]>([]);
 
   useEffect(() => {
     if (user) {
@@ -175,6 +161,77 @@ export function SalesPerformanceContent() {
       console.error('Error fetching sales data:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSalesTrends = async () => {
+    try {
+      // Get quotes by month for the last 6 months
+      const { data: quotes } = await supabase
+        .from('quotes')
+        .select('total_amount, created_at, status')
+        .eq('user_id', user!.id)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: true });
+
+      // Group by month
+      const monthlyData: { [key: string]: { sales: number; revenue: number } } = {};
+      
+      quotes?.forEach(quote => {
+        const date = new Date(quote.created_at);
+        const monthKey = date.toLocaleDateString('en-US', { month: 'short' });
+        
+        if (!monthlyData[monthKey]) {
+          monthlyData[monthKey] = { sales: 0, revenue: 0 };
+        }
+        
+        monthlyData[monthKey].sales += 1;
+        monthlyData[monthKey].revenue += quote.total_amount || 0;
+      });
+
+      const trends = Object.entries(monthlyData).map(([month, data]) => ({
+        month,
+        sales: data.sales,
+        revenue: data.revenue
+      }));
+
+      setSalesTrends(trends);
+    } catch (error) {
+      console.error('Error fetching sales trends:', error);
+    }
+  };
+
+  const fetchTopReps = async () => {
+    try {
+      // Since we don't have a reps table, we'll create mock data based on real user
+      const { data: quotes } = await supabase
+        .from('quotes')
+        .select('total_amount, status')
+        .eq('user_id', user!.id)
+        .eq('status', 'approved');
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('user_id', user!.id)
+        .single();
+
+      const totalDeals = quotes?.length || 0;
+      const totalRevenue = quotes?.reduce((sum, quote) => sum + (quote.total_amount || 0), 0) || 0;
+
+      const userName = profile ? `${profile.first_name || 'User'} ${profile.last_name || ''}`.trim() : 'Current User';
+
+      setTopReps([
+        {
+          name: userName,
+          deals: totalDeals,
+          revenue: totalRevenue,
+          callsMade: totalDeals * 5, // Estimated
+          quotesSent: totalDeals * 2 // Estimated
+        }
+      ]);
+    } catch (error) {
+      console.error('Error fetching top reps:', error);
     }
   };
 
@@ -418,15 +475,21 @@ export function SalesPerformanceContent() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {salesTrends.map((trend, index) => (
-                    <div key={trend.month} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="text-sm font-medium">{trend.month}</div>
-                        <Badge variant="secondary">{trend.sales} deals</Badge>
+                  {salesTrends.length > 0 ? (
+                    salesTrends.map((trend, index) => (
+                      <div key={trend.month} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="text-sm font-medium">{trend.month}</div>
+                          <Badge variant="secondary">{trend.sales} deals</Badge>
+                        </div>
+                        <div className="text-sm font-medium">{formatCurrency(trend.revenue)}</div>
                       </div>
-                      <div className="text-sm font-medium">{formatCurrency(trend.revenue)}</div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4 text-muted-foreground">
+                      <p>No sales data available</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -441,7 +504,8 @@ export function SalesPerformanceContent() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {mockTopReps.map((rep, index) => (
+                  {topReps.length > 0 ? (
+                    topReps.map((rep, index) => (
                     <div key={rep.name} className="flex items-center justify-between p-4 bg-muted/20 rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold">
@@ -458,7 +522,12 @@ export function SalesPerformanceContent() {
                         <div className="font-bold text-success">{formatCurrency(rep.revenue)}</div>
                       </div>
                     </div>
-                  ))}
+                    ))
+                  ) : (
+                    <div className="text-center py-4 text-muted-foreground">
+                      <p>No rep data available</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

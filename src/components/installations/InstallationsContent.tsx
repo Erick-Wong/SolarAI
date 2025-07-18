@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { InstallationForm } from "./InstallationForm";
 
 interface Installation {
   id: string;
@@ -214,37 +215,10 @@ export function InstallationsContent() {
             <DialogHeader>
               <DialogTitle>Add New Installation</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="customer">Customer</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select customer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="customer1">John Smith</SelectItem>
-                    <SelectItem value="customer2">Jane Doe</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="address">Installation Address</Label>
-                <Input placeholder="Enter installation address" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="date">Scheduled Date</Label>
-                <Input type="date" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="systemSize">System Size (kW)</Label>
-                <Input type="number" placeholder="Enter system size" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
-                <Textarea placeholder="Installation notes..." />
-              </div>
-              <Button className="w-full">Create Installation</Button>
-            </div>
+            <InstallationForm onSuccess={() => {
+              setIsDialogOpen(false);
+              fetchInstallations();
+            }} />
           </DialogContent>
         </Dialog>
       </div>
