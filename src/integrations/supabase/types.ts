@@ -164,6 +164,59 @@ export type Database = {
         }
         Relationships: []
       }
+      installation_milestones: {
+        Row: {
+          assigned_to: string | null
+          completed_date: string | null
+          created_at: string
+          id: string
+          installation_id: string
+          milestone_name: string
+          milestone_type: string
+          notes: string | null
+          scheduled_date: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_date?: string | null
+          created_at?: string
+          id?: string
+          installation_id: string
+          milestone_name: string
+          milestone_type: string
+          notes?: string | null
+          scheduled_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_date?: string | null
+          created_at?: string
+          id?: string
+          installation_id?: string
+          milestone_name?: string
+          milestone_type?: string
+          notes?: string | null
+          scheduled_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installation_milestones_installation_id_fkey"
+            columns: ["installation_id"]
+            isOneToOne: false
+            referencedRelation: "installations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       installation_photos: {
         Row: {
           caption: string | null
@@ -351,6 +404,62 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      permits: {
+        Row: {
+          application_date: string | null
+          approval_date: string | null
+          created_at: string
+          expiration_date: string | null
+          id: string
+          installation_id: string
+          issuing_authority: string | null
+          notes: string | null
+          permit_number: string | null
+          permit_type: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_date?: string | null
+          approval_date?: string | null
+          created_at?: string
+          expiration_date?: string | null
+          id?: string
+          installation_id: string
+          issuing_authority?: string | null
+          notes?: string | null
+          permit_number?: string | null
+          permit_type: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_date?: string | null
+          approval_date?: string | null
+          created_at?: string
+          expiration_date?: string | null
+          id?: string
+          installation_id?: string
+          issuing_authority?: string | null
+          notes?: string | null
+          permit_number?: string | null
+          permit_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "permits_installation_id_fkey"
+            columns: ["installation_id"]
+            isOneToOne: false
+            referencedRelation: "installations"
             referencedColumns: ["id"]
           },
         ]
