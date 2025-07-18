@@ -28,6 +28,7 @@ const mainItems = [
   { title: "Overview", url: "/", icon: Home },
   { title: "Sales Performance", url: "/sales", icon: TrendingUp },
   { title: "Lead Pipeline", url: "/leads", icon: Target },
+  { title: "Quotes", url: "/quotes", icon: FileText },
   { title: "Installations", url: "/installations", icon: Zap },
   { title: "Geographic", url: "/geographic", icon: MapPin },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
