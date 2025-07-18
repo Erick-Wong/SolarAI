@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { Calendar, CheckCircle, Clock, AlertTriangle, Plus, FileText, Settings } from "lucide-react";
+import { Calendar, CheckCircle, Clock, AlertTriangle, Plus, FileText, Settings, Mail } from "lucide-react";
 
 interface Permit {
   id: string;
@@ -148,6 +148,12 @@ export function EnhancedInstallationDetails({ installationId, onClose }: Enhance
 
       if (error) throw error;
 
+      // Send customer update email
+      const milestone = milestones.find(m => m.id === milestoneId);
+      if (milestone) {
+        await sendCustomerUpdate(status, milestone.milestone_name);
+      }
+
       toast({
         title: "Success",
         description: "Milestone updated successfully.",
@@ -158,6 +164,52 @@ export function EnhancedInstallationDetails({ installationId, onClose }: Enhance
       toast({
         title: "Error",
         description: error.message || "Failed to update milestone.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const sendCustomerUpdate = async (status?: string, milestone?: string) => {
+    try {
+      // Get installation and customer data
+      const { data: installation, error: installationError } = await supabase
+        .from('installations')
+        .select(`
+          *,
+          customers (
+            email,
+            first_name,
+            last_name
+          )
+        `)
+        .eq('id', installationId)
+        .single();
+
+      if (installationError) throw installationError;
+
+      const { error } = await supabase.functions.invoke('send-installation-update', {
+        body: {
+          customerEmail: installation.customers.email,
+          customerName: `${installation.customers.first_name} ${installation.customers.last_name}`,
+          installationNumber: installation.installation_number,
+          status: status || installation.status || 'in_progress',
+          milestone: milestone,
+          scheduledDate: installation.scheduled_date ? new Date(installation.scheduled_date).toLocaleDateString() : undefined,
+          completedDate: installation.completed_date ? new Date(installation.completed_date).toLocaleDateString() : undefined,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Customer Notified",
+        description: "Customer has been sent an email update about the installation progress.",
+      });
+    } catch (error: any) {
+      console.error('Error sending customer update:', error);
+      toast({
+        title: "Email Error",
+        description: "Failed to send customer update email.",
         variant: "destructive",
       });
     }
@@ -229,10 +281,20 @@ export function EnhancedInstallationDetails({ installationId, onClose }: Enhance
       {/* Progress Overview */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Settings className="w-5 h-5" />
-            Installation Progress
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Settings className="w-5 h-5" />
+              Installation Progress
+            </CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => sendCustomerUpdate()}
+            >
+              <Mail className="h-4 w-4 mr-2" />
+              Send Update
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
