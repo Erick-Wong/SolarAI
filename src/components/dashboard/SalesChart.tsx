@@ -29,7 +29,7 @@ export function SalesChart() {
                 borderRadius: "8px",
               }}
             />
-            <Bar dataKey="sales" fill="hsl(32 95% 44%)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="sales" fill="hsl(142 71% 45%)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
