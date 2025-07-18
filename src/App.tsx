@@ -16,6 +16,7 @@ import Installations from "./pages/Installations";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import Quotes from "./pages/Quotes";
+import Financial from "./pages/Financial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/quotes" element={<Quotes />} />
+            <Route path="/financial" element={<Financial />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

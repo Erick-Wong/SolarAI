@@ -22,6 +22,7 @@ import {
   Target,
   FileText,
   UserPlus,
+  DollarSign,
 } from "lucide-react";
 
 const mainItems = [
@@ -30,6 +31,7 @@ const mainItems = [
   { title: "Lead Pipeline", url: "/leads", icon: Target },
   { title: "Quotes", url: "/quotes", icon: FileText },
   { title: "Installations", url: "/installations", icon: Zap },
+  { title: "Financial", url: "/financial", icon: DollarSign },
   { title: "Geographic", url: "/geographic", icon: MapPin },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
 ];
