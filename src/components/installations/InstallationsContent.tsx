@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { InstallationForm } from "./InstallationForm";
+import { EnhancedInstallationDetails } from "./EnhancedInstallationDetails";
 
 interface Installation {
   id: string;
@@ -51,6 +52,7 @@ export function InstallationsContent() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedInstallationId, setSelectedInstallationId] = useState<string | null>(null);
 
   // Sample data for charts (would be calculated from real data)
   const chartData = [
@@ -366,7 +368,11 @@ export function InstallationsContent() {
                 </TableHeader>
                 <TableBody>
                   {filteredInstallations.map((installation) => (
-                    <TableRow key={installation.id}>
+                    <TableRow 
+                      key={installation.id}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => setSelectedInstallationId(installation.id)}
+                    >
                       <TableCell className="font-medium">
                         {installation.customers 
                           ? `${installation.customers.first_name} ${installation.customers.last_name}`
@@ -383,7 +389,7 @@ export function InstallationsContent() {
                       <TableCell>{installation.system_size}kW</TableCell>
                       <TableCell>${installation.total_value?.toLocaleString()}</TableCell>
                       <TableCell>
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
                           {installation.status === 'in_progress' && (
                             <Button
                               size="sm"
@@ -496,6 +502,18 @@ export function InstallationsContent() {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Enhanced Installation Details Dialog */}
+      {selectedInstallationId && (
+        <Dialog open={!!selectedInstallationId} onOpenChange={() => setSelectedInstallationId(null)}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <EnhancedInstallationDetails 
+              installationId={selectedInstallationId}
+              onClose={() => setSelectedInstallationId(null)}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
