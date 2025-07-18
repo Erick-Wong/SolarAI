@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import { Plus, Search, Edit, Trash2, UserCheck } from "lucide-react";
 
 interface Lead {
   id: string;
@@ -27,6 +27,7 @@ interface Lead {
   estimated_system_size?: number;
   estimated_value?: number;
   notes?: string;
+  customer_id?: string;
   created_at: string;
 }
 
@@ -178,6 +179,92 @@ export function LeadsContent() {
     } catch (error: any) {
       toast({
         title: "Error deleting lead",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const convertToCustomer = async (lead: Lead) => {
+    if (!user) return;
+
+    try {
+      // Check if customer with same email already exists
+      const { data: existingCustomer, error: checkError } = await supabase
+        .from('customers')
+        .select('id')
+        .eq('email', lead.email)
+        .eq('user_id', user.id)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') { // PGRST116 is "not found" error
+        throw checkError;
+      }
+
+      if (existingCustomer) {
+        toast({
+          title: "Customer already exists",
+          description: "A customer with this email already exists in your database.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Create customer from lead data
+      const customerData = {
+        user_id: user.id,
+        first_name: lead.first_name,
+        last_name: lead.last_name,
+        email: lead.email,
+        phone: lead.phone,
+        address: lead.address,
+        city: lead.city,
+        state: lead.state,
+        zip_code: lead.zip_code,
+        customer_type: 'residential' as const, // Default to residential
+        notes: lead.notes
+      };
+
+      const { data: newCustomer, error: customerError } = await supabase
+        .from('customers')
+        .insert([customerData])
+        .select()
+        .single();
+
+      if (customerError) throw customerError;
+
+      // Update lead to mark as converted and link to customer
+      const { error: leadUpdateError } = await supabase
+        .from('leads')
+        .update({ 
+          status: 'won',
+          customer_id: newCustomer.id 
+        })
+        .eq('id', lead.id);
+
+      if (leadUpdateError) throw leadUpdateError;
+
+      toast({
+        title: "Lead converted successfully!",
+        description: `${lead.first_name} ${lead.last_name} has been added to your customers.`,
+        action: (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => window.open('/customers', '_blank')}
+          >
+            View Customers
+          </Button>
+        )
+      });
+
+      // Refresh leads to show updated status
+      fetchLeads();
+
+    } catch (error: any) {
+      console.error('Error converting lead to customer:', error);
+      toast({
+        title: "Failed to convert lead",
         description: error.message,
         variant: "destructive"
       });
@@ -453,6 +540,16 @@ export function LeadsContent() {
               )}
               
               <div className="flex gap-2 pt-2">
+                {(lead.status === 'won' || lead.status === 'qualified' || lead.status === 'negotiating') && !lead.customer_id && (
+                  <Button
+                    size="sm"
+                    onClick={() => convertToCustomer(lead)}
+                    className="bg-gradient-success hover:shadow-lg transition-smooth text-success-foreground"
+                  >
+                    <UserCheck className="w-3 h-3 mr-1" />
+                    Convert to Customer
+                  </Button>
+                )}
                 <Button
                   size="sm"
                   variant="outline"
@@ -471,6 +568,13 @@ export function LeadsContent() {
                   Delete
                 </Button>
               </div>
+              {lead.customer_id && (
+                <div className="mt-2">
+                  <Badge variant="secondary" className="text-xs bg-success/10 text-success">
+                    ✓ Converted to Customer
+                  </Badge>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}
