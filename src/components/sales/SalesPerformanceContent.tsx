@@ -26,6 +26,7 @@ import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { GeographicMap } from "./GeographicMap";
 import { RegionalAnalytics } from "./RegionalAnalytics";
+import { NorthTexasInstallationMap } from "./NorthTexasInstallationMap";
 
 interface SalesKPI {
   totalSales: number;
@@ -82,9 +83,14 @@ export function SalesPerformanceContent() {
   const [sourceFilter, setSourceFilter] = useState("all");
   const [repFilter, setRepFilter] = useState("all");
   const [selectedMapMetric, setSelectedMapMetric] = useState<'sales' | 'revenue' | 'installations' | 'leads' | 'conversion'>('sales');
+  const [mapboxToken, setMapboxToken] = useState('');
 
   const handleMapMetricChange = (metric: string) => {
     setSelectedMapMetric(metric as 'sales' | 'revenue' | 'installations' | 'leads' | 'conversion');
+  };
+
+  const handleMapboxTokenChange = (token: string) => {
+    setMapboxToken(token);
   };
 
   const mockTopReps: TopRep[] = [
@@ -507,6 +513,12 @@ export function SalesPerformanceContent() {
 
         {/* Geographic Tab */}
         <TabsContent value="geographic" className="space-y-8">
+          {/* North Texas Installation Map */}
+          <NorthTexasInstallationMap 
+            mapboxToken={mapboxToken}
+            onTokenChange={handleMapboxTokenChange}
+          />
+
           {/* Interactive Geographic Map */}
           <GeographicMap 
             data={[]}
