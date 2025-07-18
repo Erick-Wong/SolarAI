@@ -17,10 +17,14 @@ import {
   Filter,
   Calendar,
   MapPin,
-  Star
+  Star,
+  Map,
+  BarChart3
 } from "lucide-react";
 import { format, subMonths, startOfMonth, endOfMonth } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { GeographicMap } from "./GeographicMap";
+import { RegionalAnalytics } from "./RegionalAnalytics";
 
 interface SalesKPI {
   totalSales: number;
@@ -76,6 +80,11 @@ export function SalesPerformanceContent() {
   const [regionFilter, setRegionFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [repFilter, setRepFilter] = useState("all");
+  const [selectedMapMetric, setSelectedMapMetric] = useState<'sales' | 'revenue' | 'installations' | 'leads' | 'conversion'>('sales');
+
+  const handleMapMetricChange = (metric: string) => {
+    setSelectedMapMetric(metric as 'sales' | 'revenue' | 'installations' | 'leads' | 'conversion');
+  };
 
   const mockTopReps: TopRep[] = [
     { name: "Sarah Johnson", deals: 12, revenue: 420000, callsMade: 89, quotesSent: 24 },
@@ -450,9 +459,18 @@ export function SalesPerformanceContent() {
         </Card>
       </div>
 
+      {/* Interactive Geographic Map */}
+      <div className="col-span-full">
+        <GeographicMap 
+          data={[]}
+          selectedMetric={selectedMapMetric}
+          onMetricChange={handleMapMetricChange}
+        />
+      </div>
+
       {/* Geographic Sales and Pipeline Forecast */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Geographic Sales Heatmap */}
+        {/* Geographic Sales Distribution */}
         <Card className="bg-gradient-card border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -515,6 +533,15 @@ export function SalesPerformanceContent() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Regional Analytics Section */}
+      <div>
+        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+          <BarChart3 className="w-6 h-6 text-primary" />
+          Regional Analytics
+        </h2>
+        <RegionalAnalytics data={[]} />
       </div>
     </div>
   );
