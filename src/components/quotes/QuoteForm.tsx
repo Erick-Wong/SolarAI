@@ -282,7 +282,7 @@ export function QuoteForm({ customers, equipment, onSuccess, generateQuoteNumber
                     <SelectValue placeholder="Select equipment" />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">
-                    <SelectItem value="">Custom Item</SelectItem>
+                    <SelectItem value="custom">Custom Item</SelectItem>
                     {equipment.map((eq) => (
                       <SelectItem key={eq.id} value={eq.id}>
                         {eq.name} - ${eq.unit_price}
