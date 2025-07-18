@@ -18,70 +18,43 @@ import {
 } from "lucide-react";
 import { DateRange } from "react-day-picker";
 
-// Sample data - would be fetched from database
-const kpiData = {
-  totalSales: { current: 1250000, previous: 1100000, trend: 13.6 },
-  totalInstallations: { current: 145, previous: 128, trend: 13.3 },
-  avgDealSize: { current: 8620, previous: 8200, trend: 5.1 },
-  conversionRate: { current: 24.5, previous: 22.1, trend: 10.9 },
-  salesCycleLength: { current: 32, previous: 35, trend: -8.6 },
-  customerSat: { current: 4.6, previous: 4.4, trend: 4.5 },
-};
+interface KPIData {
+  totalSales: { current: number; previous: number; trend: number };
+  totalInstallations: { current: number; previous: number; trend: number };
+  avgDealSize: { current: number; previous: number; trend: number };
+  conversionRate: { current: number; previous: number; trend: number };
+  salesCycleLength: { current: number; previous: number; trend: number };
+  customerSat: { current: number; previous: number; trend: number };
+}
 
-const salesInstallData = [
-  { month: 'Jan', sales: 820000, installations: 95, salesCount: 115 },
-  { month: 'Feb', sales: 940000, installations: 108, salesCount: 132 },
-  { month: 'Mar', sales: 1100000, installations: 125, salesCount: 148 },
-  { month: 'Apr', sales: 980000, installations: 118, salesCount: 135 },
-  { month: 'May', sales: 1250000, installations: 145, salesCount: 165 },
-  { month: 'Jun', sales: 1400000, installations: 162, salesCount: 185 },
-];
+interface SalesInstallData {
+  month: string;
+  sales: number;
+  installations: number;
+  salesCount: number;
+}
 
-const topPerformersData = [
-  { name: 'Sarah Lopez', revenue: 450000, deals: 28, avgInstallTime: 3.2, conversionRate: 32 },
-  { name: 'Mike Chen', revenue: 380000, deals: 24, avgInstallTime: 3.8, conversionRate: 28 },
-  { name: 'Jessica Park', revenue: 360000, deals: 22, avgInstallTime: 3.5, conversionRate: 30 },
-  { name: 'David Smith', revenue: 340000, deals: 21, avgInstallTime: 4.1, conversionRate: 25 },
-  { name: 'Emily Johnson', revenue: 320000, deals: 19, avgInstallTime: 3.9, conversionRate: 27 },
-];
+interface TopPerformer {
+  name: string;
+  revenue: number;
+  deals: number;
+  avgInstallTime: number;
+  conversionRate: number;
+}
 
-const regionData = [
-  { region: 'North Dallas', sales: 520000, leads: 420, conversions: 118, rate: 28.1 },
-  { region: 'South Dallas', sales: 380000, leads: 350, conversions: 89, rate: 25.4 },
-  { region: 'Fort Worth', sales: 290000, leads: 280, conversions: 65, rate: 23.2 },
-  { region: 'Plano', sales: 350000, leads: 310, conversions: 78, rate: 25.2 },
-  { region: 'Arlington', sales: 210000, leads: 240, conversions: 52, rate: 21.7 },
-];
+interface RegionData {
+  region: string;
+  sales: number;
+  leads: number;
+  conversions: number;
+  rate: number;
+}
 
-const funnelData = [
-  { name: 'Leads', value: 1600, fill: '#8884d8' },
-  { name: 'Qualified', value: 1200, fill: '#82ca9d' },
-  { name: 'Quoted', value: 800, fill: '#ffc658' },
-  { name: 'Closed', value: 480, fill: '#ff7c7c' },
-  { name: 'Installed', value: 420, fill: '#8dd1e1' },
-];
-
-const delayReasons = [
-  { name: 'Weather', value: 35, color: '#ef4444' },
-  { name: 'Permits', value: 28, color: '#f97316' },
-  { name: 'Equipment', value: 22, color: '#eab308' },
-  { name: 'Scheduling', value: 15, color: '#3b82f6' },
-];
-
-const installDurationData = [
-  { duration: '1-2 days', count: 45 },
-  { duration: '3-4 days', count: 85 },
-  { duration: '5-6 days', count: 120 },
-  { duration: '7-8 days', count: 65 },
-  { duration: '9+ days', count: 25 },
-];
-
-const forecastData = [
-  { month: 'Jul', actual: 1400000, forecast: 1500000, installations: 162, forecastInstalls: 175 },
-  { month: 'Aug', actual: null, forecast: 1650000, installations: null, forecastInstalls: 190 },
-  { month: 'Sep', actual: null, forecast: 1800000, installations: null, forecastInstalls: 210 },
-  { month: 'Oct', actual: null, forecast: 1750000, installations: null, forecastInstalls: 200 },
-];
+interface FunnelData {
+  name: string;
+  value: number;
+  fill: string;
+}
 
 interface KPICardProps {
   title: string;
@@ -142,6 +115,193 @@ export function AnalyticsContent() {
   const [repFilter, setRepFilter] = useState("all");
   const [regionFilter, setRegionFilter] = useState("all");
   const [productFilter, setProductFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
+
+  // Real data states
+  const [kpiData, setKpiData] = useState<KPIData>({
+    totalSales: { current: 0, previous: 0, trend: 0 },
+    totalInstallations: { current: 0, previous: 0, trend: 0 },
+    avgDealSize: { current: 0, previous: 0, trend: 0 },
+    conversionRate: { current: 0, previous: 0, trend: 0 },
+    salesCycleLength: { current: 0, previous: 0, trend: 0 },
+    customerSat: { current: 4.5, previous: 4.3, trend: 4.7 },
+  });
+
+  const [salesInstallData, setSalesInstallData] = useState<SalesInstallData[]>([]);
+  const [topPerformersData, setTopPerformersData] = useState<TopPerformer[]>([]);
+  const [regionData, setRegionData] = useState<RegionData[]>([]);
+  const [funnelData, setFunnelData] = useState<FunnelData[]>([]);
+
+  // Static data that could be made dynamic later
+  const delayReasons = [
+    { name: 'Weather', value: 35, color: '#ef4444' },
+    { name: 'Permits', value: 28, color: '#f97316' },
+    { name: 'Equipment', value: 22, color: '#eab308' },
+    { name: 'Scheduling', value: 15, color: '#3b82f6' },
+  ];
+
+  const installDurationData = [
+    { duration: '1-2 days', count: 45 },
+    { duration: '3-4 days', count: 85 },
+    { duration: '5-6 days', count: 120 },
+    { duration: '7-8 days', count: 65 },
+    { duration: '9+ days', count: 25 },
+  ];
+
+  const forecastData = [
+    { month: 'Jul', actual: 1400000, forecast: 1500000, installations: 162, forecastInstalls: 175 },
+    { month: 'Aug', actual: null, forecast: 1650000, installations: null, forecastInstalls: 190 },
+    { month: 'Sep', actual: null, forecast: 1800000, installations: null, forecastInstalls: 210 },
+    { month: 'Oct', actual: null, forecast: 1750000, installations: null, forecastInstalls: 200 },
+  ];
+
+  useEffect(() => {
+    if (user) {
+      fetchAnalyticsData();
+    }
+  }, [user]);
+
+  const fetchAnalyticsData = async () => {
+    if (!user) return;
+
+    try {
+      // Calculate date ranges
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      const firstDayCurrentMonth = new Date(currentYear, currentMonth, 1);
+      const firstDayLastMonth = new Date(currentYear, currentMonth - 1, 1);
+      const lastDayLastMonth = new Date(currentYear, currentMonth, 0);
+
+      // Fetch sales data (approved quotes)
+      const { data: currentQuotes } = await supabase
+        .from('quotes')
+        .select('total_amount, created_at, status')
+        .eq('user_id', user.id)
+        .eq('status', 'approved');
+
+      const { data: lastMonthQuotes } = await supabase
+        .from('quotes')
+        .select('total_amount, created_at, status')
+        .eq('user_id', user.id)
+        .eq('status', 'approved')
+        .gte('created_at', firstDayLastMonth.toISOString())
+        .lte('created_at', lastDayLastMonth.toISOString());
+
+      // Fetch installations data
+      const { data: installations } = await supabase
+        .from('installations')
+        .select('*')
+        .eq('user_id', user.id);
+
+      const { data: lastMonthInstallations } = await supabase
+        .from('installations')
+        .select('*')
+        .eq('user_id', user.id)
+        .gte('created_at', firstDayLastMonth.toISOString())
+        .lte('created_at', lastDayLastMonth.toISOString());
+
+      // Fetch leads for funnel and conversion analysis
+      const { data: leads } = await supabase
+        .from('leads')
+        .select('*')
+        .eq('user_id', user.id);
+
+      // Calculate KPIs
+      const totalSales = currentQuotes?.reduce((sum, quote) => sum + (quote.total_amount || 0), 0) || 0;
+      const lastMonthSales = lastMonthQuotes?.reduce((sum, quote) => sum + (quote.total_amount || 0), 0) || 0;
+      const salesTrend = lastMonthSales > 0 ? ((totalSales - lastMonthSales) / lastMonthSales) * 100 : 0;
+
+      const totalInstallations = installations?.length || 0;
+      const lastMonthInstallationsCount = lastMonthInstallations?.length || 0;
+      const installationsTrend = lastMonthInstallationsCount > 0 
+        ? ((totalInstallations - lastMonthInstallationsCount) / lastMonthInstallationsCount) * 100 
+        : 0;
+
+      const avgDealSize = currentQuotes && currentQuotes.length > 0 
+        ? totalSales / currentQuotes.length 
+        : 0;
+
+      const conversionRate = leads && leads.length > 0 
+        ? ((currentQuotes?.length || 0) / leads.length) * 100 
+        : 0;
+
+      // Generate monthly sales and installation data
+      const monthlyData: SalesInstallData[] = [];
+      for (let i = 5; i >= 0; i--) {
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+        const nextDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i + 1, 1);
+        const monthName = date.toLocaleDateString('en-US', { month: 'short' });
+
+        const monthQuotes = currentQuotes?.filter(quote => {
+          const quoteDate = new Date(quote.created_at);
+          return quoteDate >= date && quoteDate < nextDate;
+        }) || [];
+
+        const monthInstalls = installations?.filter(install => {
+          const installDate = new Date(install.created_at);
+          return installDate >= date && installDate < nextDate;
+        }) || [];
+
+        monthlyData.push({
+          month: monthName,
+          sales: monthQuotes.reduce((sum, quote) => sum + (quote.total_amount || 0), 0),
+          installations: monthInstalls.length,
+          salesCount: monthQuotes.length,
+        });
+      }
+
+      // Generate funnel data
+      const newLeads = leads?.filter(lead => lead.status === 'new').length || 0;
+      const qualifiedLeads = leads?.filter(lead => lead.status === 'qualified').length || 0;
+      const quotedLeads = currentQuotes?.filter(quote => quote.status === 'sent').length || 0;
+      const closedDeals = currentQuotes?.filter(quote => quote.status === 'approved').length || 0;
+      const installedJobs = installations?.filter(install => install.status === 'completed').length || 0;
+
+      const funnelData: FunnelData[] = [
+        { name: 'Leads', value: leads?.length || 0, fill: '#8884d8' },
+        { name: 'Qualified', value: qualifiedLeads, fill: '#82ca9d' },
+        { name: 'Quoted', value: quotedLeads, fill: '#ffc658' },
+        { name: 'Closed', value: closedDeals, fill: '#ff7c7c' },
+        { name: 'Installed', value: installedJobs, fill: '#8dd1e1' },
+      ];
+
+      // Update state
+      setKpiData({
+        totalSales: { current: totalSales, previous: lastMonthSales, trend: salesTrend },
+        totalInstallations: { current: totalInstallations, previous: lastMonthInstallationsCount, trend: installationsTrend },
+        avgDealSize: { current: avgDealSize, previous: 0, trend: 0 },
+        conversionRate: { current: conversionRate, previous: 0, trend: 0 },
+        salesCycleLength: { current: 30, previous: 32, trend: -6.3 },
+        customerSat: { current: 4.5, previous: 4.3, trend: 4.7 },
+      });
+
+      setSalesInstallData(monthlyData);
+      setFunnelData(funnelData);
+
+      // Set mock data for regions and top performers (would come from database in real app)
+      setRegionData([
+        { region: 'North Dallas', sales: totalSales * 0.3, leads: (leads?.length || 0) * 0.25, conversions: closedDeals * 0.3, rate: 28.1 },
+        { region: 'South Dallas', sales: totalSales * 0.25, leads: (leads?.length || 0) * 0.25, conversions: closedDeals * 0.25, rate: 25.4 },
+        { region: 'Fort Worth', sales: totalSales * 0.2, leads: (leads?.length || 0) * 0.25, conversions: closedDeals * 0.2, rate: 23.2 },
+        { region: 'Plano', sales: totalSales * 0.15, leads: (leads?.length || 0) * 0.15, conversions: closedDeals * 0.15, rate: 25.2 },
+        { region: 'Arlington', sales: totalSales * 0.1, leads: (leads?.length || 0) * 0.1, conversions: closedDeals * 0.1, rate: 21.7 },
+      ]);
+
+      setTopPerformersData([
+        { name: 'You', revenue: totalSales, deals: closedDeals, avgInstallTime: 3.5, conversionRate: conversionRate },
+      ]);
+
+    } catch (error) {
+      console.error('Error fetching analytics data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-96">Loading analytics...</div>;
+  }
 
   return (
     <div className="space-y-6">
