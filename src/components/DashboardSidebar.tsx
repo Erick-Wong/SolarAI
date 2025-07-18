@@ -20,6 +20,8 @@ import {
   TrendingUp,
   Calendar,
   Target,
+  FileText,
+  UserPlus,
 } from "lucide-react";
 
 const mainItems = [
@@ -33,7 +35,8 @@ const mainItems = [
 
 const managementItems = [
   { title: "Customers", url: "/customers", icon: Users },
-  { title: "Team", url: "/team", icon: Users },
+  { title: "Leads", url: "/leads", icon: UserPlus },
+  { title: "Documents", url: "/documents", icon: FileText },
   { title: "Calendar", url: "/calendar", icon: Calendar },
   { title: "Settings", url: "/settings", icon: Settings },
 ];

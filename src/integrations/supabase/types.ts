@@ -68,6 +68,57 @@ export type Database = {
         }
         Relationships: []
       }
+      documents: {
+        Row: {
+          created_at: string
+          description: string | null
+          document_type: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_type: string
+          id: string
+          related_entity_id: string | null
+          related_entity_type: string | null
+          title: string | null
+          updated_at: string
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          document_type: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_type: string
+          id?: string
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          title?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          document_type?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string
+          id?: string
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          title?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       equipment: {
         Row: {
           category: string
@@ -112,6 +163,54 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      installation_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          document_id: string
+          id: string
+          installation_id: string
+          photo_stage: string
+          taken_at: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          document_id: string
+          id?: string
+          installation_id: string
+          photo_stage: string
+          taken_at?: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          document_id?: string
+          id?: string
+          installation_id?: string
+          photo_stage?: string
+          taken_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installation_photos_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "installation_photos_installation_id_fkey"
+            columns: ["installation_id"]
+            isOneToOne: false
+            referencedRelation: "installations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       installations: {
         Row: {
