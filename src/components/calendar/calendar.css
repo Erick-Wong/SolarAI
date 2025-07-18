@@ -1,0 +1,104 @@
+/* Calendar-specific styles */
+.calendar-container .rbc-calendar {
+  font-family: inherit;
+}
+
+.calendar-container .rbc-toolbar {
+  display: none; /* Hide default toolbar since we have custom controls */
+}
+
+.calendar-container .rbc-month-view,
+.calendar-container .rbc-time-view {
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.calendar-container .rbc-header {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  border-bottom: 1px solid hsl(var(--border));
+  padding: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.calendar-container .rbc-date-cell {
+  text-align: right;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.calendar-container .rbc-off-range-bg {
+  background: hsl(var(--muted) / 0.3);
+}
+
+.calendar-container .rbc-today {
+  background: hsl(var(--primary) / 0.1);
+}
+
+.calendar-container .rbc-event {
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.calendar-container .rbc-event:hover {
+  opacity: 0.8;
+}
+
+.calendar-container .rbc-event-content {
+  font-weight: 500;
+}
+
+.calendar-container .rbc-day-bg {
+  border-right: 1px solid hsl(var(--border));
+}
+
+.calendar-container .rbc-month-row {
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.calendar-container .rbc-date-cell a {
+  color: hsl(var(--foreground));
+  text-decoration: none;
+}
+
+.calendar-container .rbc-date-cell a:hover {
+  color: hsl(var(--primary));
+}
+
+/* Week and Day view styles */
+.calendar-container .rbc-time-header {
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.calendar-container .rbc-time-content {
+  border-top: 1px solid hsl(var(--border));
+}
+
+.calendar-container .rbc-time-slot {
+  border-top: 1px solid hsl(var(--border) / 0.3);
+}
+
+.calendar-container .rbc-timeslot-group {
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.calendar-container .rbc-current-time-indicator {
+  background-color: hsl(var(--primary));
+}
+
+/* Dark mode support */
+.dark .calendar-container .rbc-month-view,
+.dark .calendar-container .rbc-time-view {
+  background: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+.dark .calendar-container .rbc-off-range {
+  color: hsl(var(--muted-foreground));
+}
