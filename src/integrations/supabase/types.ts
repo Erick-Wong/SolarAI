@@ -14,6 +14,248 @@ export type Database = {
   }
   public: {
     Tables: {
+      customers: {
+        Row: {
+          address: string | null
+          city: string | null
+          company_name: string | null
+          created_at: string
+          customer_type: Database["public"]["Enums"]["customer_type"] | null
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          notes: string | null
+          phone: string | null
+          state: string | null
+          updated_at: string
+          user_id: string
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          created_at?: string
+          customer_type?: Database["public"]["Enums"]["customer_type"] | null
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          notes?: string | null
+          phone?: string | null
+          state?: string | null
+          updated_at?: string
+          user_id: string
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          created_at?: string
+          customer_type?: Database["public"]["Enums"]["customer_type"] | null
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          notes?: string | null
+          phone?: string | null
+          state?: string | null
+          updated_at?: string
+          user_id?: string
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
+      equipment: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          manufacturer: string | null
+          model: string | null
+          name: string
+          specifications: Json | null
+          unit_price: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name: string
+          specifications?: Json | null
+          unit_price?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          manufacturer?: string | null
+          model?: string | null
+          name?: string
+          specifications?: Json | null
+          unit_price?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      installations: {
+        Row: {
+          completed_date: string | null
+          created_at: string
+          customer_id: string
+          customer_notes: string | null
+          id: string
+          installation_address: string
+          installation_number: string
+          installer_notes: string | null
+          quote_id: string | null
+          scheduled_date: string | null
+          status: Database["public"]["Enums"]["installation_status"] | null
+          system_size: number | null
+          total_value: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_date?: string | null
+          created_at?: string
+          customer_id: string
+          customer_notes?: string | null
+          id?: string
+          installation_address: string
+          installation_number: string
+          installer_notes?: string | null
+          quote_id?: string | null
+          scheduled_date?: string | null
+          status?: Database["public"]["Enums"]["installation_status"] | null
+          system_size?: number | null
+          total_value?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_date?: string | null
+          created_at?: string
+          customer_id?: string
+          customer_notes?: string | null
+          id?: string
+          installation_address?: string
+          installation_number?: string
+          installer_notes?: string | null
+          quote_id?: string | null
+          scheduled_date?: string | null
+          status?: Database["public"]["Enums"]["installation_status"] | null
+          system_size?: number | null
+          total_value?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installations_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "installations_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          address: string | null
+          assigned_to: string | null
+          city: string | null
+          created_at: string
+          customer_id: string | null
+          email: string
+          estimated_system_size: number | null
+          estimated_value: number | null
+          first_name: string
+          id: string
+          last_name: string
+          notes: string | null
+          phone: string | null
+          source: string | null
+          state: string | null
+          status: Database["public"]["Enums"]["lead_status"] | null
+          updated_at: string
+          user_id: string
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          assigned_to?: string | null
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email: string
+          estimated_system_size?: number | null
+          estimated_value?: number | null
+          first_name: string
+          id?: string
+          last_name: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["lead_status"] | null
+          updated_at?: string
+          user_id: string
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          assigned_to?: string | null
+          city?: string | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string
+          estimated_system_size?: number | null
+          estimated_value?: number | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["lead_status"] | null
+          updated_at?: string
+          user_id?: string
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           company_name: string | null
@@ -53,6 +295,120 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_items: {
+        Row: {
+          created_at: string
+          description: string
+          equipment_id: string | null
+          id: string
+          quantity: number
+          quote_id: string
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          equipment_id?: string | null
+          id?: string
+          quantity?: number
+          quote_id: string
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          equipment_id?: string | null
+          id?: string
+          quantity?: number
+          quote_id?: string
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_items_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          created_at: string
+          customer_id: string
+          estimated_annual_production: number | null
+          id: string
+          installation_address: string | null
+          lead_id: string | null
+          notes: string | null
+          quote_number: string
+          status: Database["public"]["Enums"]["quote_status"] | null
+          system_size: number | null
+          total_amount: number
+          updated_at: string
+          user_id: string
+          valid_until: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          estimated_annual_production?: number | null
+          id?: string
+          installation_address?: string | null
+          lead_id?: string | null
+          notes?: string | null
+          quote_number: string
+          status?: Database["public"]["Enums"]["quote_status"] | null
+          system_size?: number | null
+          total_amount: number
+          updated_at?: string
+          user_id: string
+          valid_until?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          estimated_annual_production?: number | null
+          id?: string
+          installation_address?: string | null
+          lead_id?: string | null
+          notes?: string | null
+          quote_number?: string
+          status?: Database["public"]["Enums"]["quote_status"] | null
+          system_size?: number | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -61,7 +417,21 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      customer_type: "residential" | "commercial"
+      installation_status:
+        | "scheduled"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+      lead_status:
+        | "new"
+        | "contacted"
+        | "qualified"
+        | "proposal_sent"
+        | "negotiating"
+        | "won"
+        | "lost"
+      quote_status: "draft" | "sent" | "approved" | "rejected" | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -188,6 +558,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      customer_type: ["residential", "commercial"],
+      installation_status: [
+        "scheduled",
+        "in_progress",
+        "completed",
+        "cancelled",
+      ],
+      lead_status: [
+        "new",
+        "contacted",
+        "qualified",
+        "proposal_sent",
+        "negotiating",
+        "won",
+        "lost",
+      ],
+      quote_status: ["draft", "sent", "approved", "rejected", "expired"],
+    },
   },
 } as const

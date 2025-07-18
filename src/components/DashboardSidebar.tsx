@@ -32,6 +32,7 @@ const mainItems = [
 ];
 
 const managementItems = [
+  { title: "Customers", url: "/customers", icon: Users },
   { title: "Team", url: "/team", icon: Users },
   { title: "Calendar", url: "/calendar", icon: Calendar },
   { title: "Settings", url: "/settings", icon: Settings },
