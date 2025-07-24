@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, Edit, Trash2, UserCheck } from "lucide-react";
+import { Plus, Search, Edit, Trash2, UserCheck, Zap } from "lucide-react";
 
 interface Lead {
   id: string;
@@ -59,6 +59,7 @@ export function LeadsContent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isQuestionnaireOpen, setIsQuestionnaireOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -74,6 +75,13 @@ export function LeadsContent() {
     estimated_system_size: "",
     estimated_value: "",
     notes: ""
+  });
+
+  const [questionnaireData, setQuestionnaireData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    search_criteria: ""
   });
 
   useEffect(() => {
@@ -271,6 +279,42 @@ export function LeadsContent() {
     }
   };
 
+  const handleQuestionnaireSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('https://erickwc.app.n8n.cloud/webhook-test/ac6c6b78-f11a-4095-8751-0e9d60218a0b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(questionnaireData)
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Questionnaire submitted successfully!",
+          description: "Your lead generation request has been sent."
+        });
+        setIsQuestionnaireOpen(false);
+        setQuestionnaireData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          search_criteria: ""
+        });
+      } else {
+        throw new Error('Failed to submit questionnaire');
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error submitting questionnaire",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       first_name: "",
@@ -311,7 +355,73 @@ export function LeadsContent() {
   return (
     <div className="space-y-6">
       {/* Header Actions */}
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
+        <Dialog open={isQuestionnaireOpen} onOpenChange={setIsQuestionnaireOpen}>
+          <DialogTrigger asChild>
+            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth">
+              <Zap className="w-4 h-4 mr-2" />
+              Generate Leads
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Generate Leads Questionnaire</DialogTitle>
+              <DialogDescription>
+                Fill out this form to generate potential leads based on your criteria
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleQuestionnaireSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="q_first_name">First Name *</Label>
+                <Input
+                  id="q_first_name"
+                  value={questionnaireData.first_name}
+                  onChange={(e) => setQuestionnaireData({...questionnaireData, first_name: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="q_last_name">Last Name *</Label>
+                <Input
+                  id="q_last_name"
+                  value={questionnaireData.last_name}
+                  onChange={(e) => setQuestionnaireData({...questionnaireData, last_name: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="q_email">Email *</Label>
+                <Input
+                  id="q_email"
+                  type="email"
+                  value={questionnaireData.email}
+                  onChange={(e) => setQuestionnaireData({...questionnaireData, email: e.target.value})}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="q_search_criteria">Search Criteria *</Label>
+                <Textarea
+                  id="q_search_criteria"
+                  value={questionnaireData.search_criteria}
+                  onChange={(e) => setQuestionnaireData({...questionnaireData, search_criteria: e.target.value})}
+                  placeholder="Describe the type of leads you're looking for..."
+                  rows={3}
+                  required
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button type="submit" className="bg-gradient-solar hover:shadow-solar transition-smooth">
+                  Submit Request
+                </Button>
+                <Button type="button" variant="outline" onClick={() => setIsQuestionnaireOpen(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
+        
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={resetForm} className="bg-gradient-solar hover:shadow-solar transition-smooth">
